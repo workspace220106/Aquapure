@@ -114,88 +114,90 @@ export default function ExplorerPage() {
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col sm:flex-row sm:items-center justify-between mb-lg gap-sm border-b border-outline-variant pb-md"
+        className="flex flex-col mb-lg gap-md border-b border-outline-variant pb-md"
       >
-        <div className="flex items-center gap-4">
-          <div>
-            <h2 className="font-headline-md text-headline-md text-on-surface mb-1">Water Monitoring Station</h2>
-            <p className="font-body-md text-body-md text-on-surface-variant flex items-center gap-2">
-              <span className={`w-2.5 h-2.5 rounded-full animate-pulse ${loading ? 'bg-yellow-500' : 'bg-[#10b981]'}`}></span> 
-              {loading ? 'Initializing Data Stream...' : `Active Station: ${activeStation?.location}`}
-            </p>
-          </div>
-        </div>
-
-        <div className="flex gap-3 items-center mt-2 sm:mt-0 relative">
-          {/* Station Selector Dropdown */}
-          {!loading && (
-            <div className="relative">
-              <select
-                value={selectedStationId}
-                onChange={(e) => setSelectedStationId(e.target.value)}
-                className="bg-surface border border-outline-variant text-on-surface text-xs p-sm rounded-lg focus:outline-none focus:border-primary pr-8 appearance-none cursor-pointer font-bold shadow-sm"
-              >
-                {stations.map((station) => (
-                  <option key={station.id} value={station.id}>
-                    {station.region === 'India' ? '🇮🇳 ' : station.region === 'USA' ? '🇺🇸 ' : '🌐 '}
-                    {station.location} ({station.status})
-                  </option>
-                ))}
-              </select>
-              <span className="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-[16px]">expand_more</span>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-sm">
+          <div className="flex items-center gap-4">
+            <div>
+              <h2 className="font-headline-md text-headline-md text-on-surface mb-1">Water Monitoring Station</h2>
+              <p className="font-body-md text-body-md text-on-surface-variant flex items-center gap-2">
+                <span className={`w-2.5 h-2.5 rounded-full animate-pulse ${loading ? 'bg-yellow-500' : 'bg-[#10b981]'}`}></span> 
+                {loading ? 'Initializing Data Stream...' : `Active Station: ${activeStation?.location}`}
+              </p>
             </div>
-          )}
+          </div>
 
-          {/* Parameters Filter Trigger */}
-          <div className="relative">
+          <div className="flex gap-3 items-center mt-2 sm:mt-0 relative">
+            {/* Parameters Filter Trigger */}
+            <div className="relative">
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setShowParamFilter(!showParamFilter)}
+                className="px-3 py-2 border border-outline-variant rounded font-label-lg text-label-lg text-on-surface hover:bg-surface-container-high transition-colors flex items-center gap-2 h-fit text-xs font-bold"
+              >
+                <span className="material-symbols-outlined text-[18px]">filter_list</span>
+                Parameters ({activeParamsCount})
+              </motion.button>
+
+              {showParamFilter && (
+                <div className="absolute right-0 mt-2 w-56 bg-white border border-outline-variant rounded-lg p-md shadow-xl z-50 flex flex-col gap-sm">
+                  <h5 className="font-label-md text-label-md font-bold border-b border-outline-variant pb-xs text-xs text-zinc-950 uppercase">Toggle Parameters</h5>
+                  {Object.keys(visibleParams).map((key) => (
+                    <label key={key} className="flex items-center gap-2 text-xs font-semibold cursor-pointer text-zinc-700 hover:text-zinc-950">
+                      <input
+                        type="checkbox"
+                        checked={visibleParams[key as keyof typeof visibleParams]}
+                        onChange={() => setVisibleParams(prev => ({
+                          ...prev,
+                          [key]: !prev[key as keyof typeof visibleParams]
+                        }))}
+                        className="rounded border-outline-variant text-zinc-900 focus:ring-zinc-900 h-4 w-4"
+                      />
+                      <span className="capitalize">{key.replace(/_/g, ' ')}</span>
+                    </label>
+                  ))}
+                  <button 
+                    onClick={() => setShowParamFilter(false)}
+                    className="mt-1 w-full bg-zinc-900 text-white text-[10px] py-1 rounded font-bold hover:bg-zinc-800 transition-colors uppercase"
+                  >
+                    Close
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Export Log Button */}
             <motion.button 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => setShowParamFilter(!showParamFilter)}
-              className="px-3 py-2 border border-outline-variant rounded font-label-lg text-label-lg text-on-surface hover:bg-surface-container-high transition-colors flex items-center gap-2 h-fit text-xs font-bold"
+              onClick={handleExport}
+              className="px-3 py-2 bg-primary rounded font-label-lg text-label-lg text-on-primary hover:bg-on-surface transition-colors flex items-center gap-2 h-fit text-xs font-bold shadow-sm"
             >
-              <span className="material-symbols-outlined text-[18px]">filter_list</span>
-              Parameters ({activeParamsCount})
+              <span className="material-symbols-outlined text-[18px]">download</span>
+              Export Log
             </motion.button>
-
-            {showParamFilter && (
-              <div className="absolute right-0 mt-2 w-56 bg-white border border-outline-variant rounded-lg p-md shadow-xl z-50 flex flex-col gap-sm">
-                <h5 className="font-label-md text-label-md font-bold border-b border-outline-variant pb-xs text-xs text-zinc-950 uppercase">Toggle Parameters</h5>
-                {Object.keys(visibleParams).map((key) => (
-                  <label key={key} className="flex items-center gap-2 text-xs font-semibold cursor-pointer text-zinc-700 hover:text-zinc-950">
-                    <input
-                      type="checkbox"
-                      checked={visibleParams[key as keyof typeof visibleParams]}
-                      onChange={() => setVisibleParams(prev => ({
-                        ...prev,
-                        [key]: !prev[key as keyof typeof visibleParams]
-                      }))}
-                      className="rounded border-outline-variant text-zinc-900 focus:ring-zinc-900 h-4 w-4"
-                    />
-                    <span className="capitalize">{key.replace(/_/g, ' ')}</span>
-                  </label>
-                ))}
-                <button 
-                  onClick={() => setShowParamFilter(false)}
-                  className="mt-1 w-full bg-zinc-900 text-white text-[10px] py-1 rounded font-bold hover:bg-zinc-800 transition-colors uppercase"
-                >
-                  Close
-                </button>
-              </div>
-            )}
           </div>
-
-          {/* Export Log Button */}
-          <motion.button 
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleExport}
-            className="px-3 py-2 bg-primary rounded font-label-lg text-label-lg text-on-primary hover:bg-on-surface transition-colors flex items-center gap-2 h-fit text-xs font-bold shadow-sm"
-          >
-            <span className="material-symbols-outlined text-[18px]">download</span>
-            Export Log
-          </motion.button>
         </div>
+
+        {/* Station Selector Dropdown (Aligned below the Title and Action Buttons) */}
+        {!loading && (
+          <div className="relative w-full max-w-[500px]">
+            <select
+              value={selectedStationId}
+              onChange={(e) => setSelectedStationId(e.target.value)}
+              className="w-full bg-surface border border-outline-variant text-on-surface text-xs p-sm rounded-lg focus:outline-none focus:border-primary pr-10 appearance-none cursor-pointer font-bold shadow-sm"
+            >
+              {stations.map((station) => (
+                <option key={station.id} value={station.id}>
+                  {station.region === 'India' ? '🇮🇳 ' : station.region === 'USA' ? '🇺🇸 ' : '🌐 '}
+                  {station.location} ({station.status})
+                </option>
+              ))}
+            </select>
+            <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-[16px]">expand_more</span>
+          </div>
+        )}
       </motion.div>
 
       {/* Dashboard Bento Grid */}
