@@ -48,8 +48,10 @@ export async function sendIncidentNotification(log: {
     }
   }
 
+  const fromAddress = process.env.SMTP_FROM || (user ? `"Aquacare Alerts" <${user}>` : '"Aquacare Alerts" <alerts@aquacare-telemetry.com>');
+
   const mailOptions = {
-    from: '"Aquacare Alerts" <alerts@aquacare-telemetry.com>',
+    from: fromAddress,
     to: 'tanmayagarwal2201@gmail.com',
     subject: `⚠️ Incident Alert: [${log.severity.toUpperCase()}] ${log.vector} Initiated`,
     html: `
