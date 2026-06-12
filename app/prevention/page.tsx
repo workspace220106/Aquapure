@@ -3,6 +3,98 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 
+// Predefined list of lakes with their coordinates (lat, lng)
+const LAKES_DB = [
+  // India
+  { name: "Dal Lake, Srinagar", lat: 34.11, lng: 74.87, region: "India" },
+  { name: "Vembanad Lake, Kerala", lat: 9.58, lng: 76.40, region: "India" },
+  { name: "Chilika Lake, Odisha", lat: 19.67, lng: 85.33, region: "India" },
+  { name: "Wular Lake, Jammu & Kashmir", lat: 34.35, lng: 74.58, region: "India" },
+  { name: "Loktak Lake, Manipur", lat: 24.55, lng: 93.80, region: "India" },
+  { name: "Lonar Lake, Maharashtra", lat: 19.97, lng: 76.51, region: "India" },
+  { name: "Pangong Tso, Ladakh", lat: 33.75, lng: 78.67, region: "India" },
+  { name: "Lake Pichola, Rajasthan", lat: 24.57, lng: 73.68, region: "India" },
+  // USA
+  { name: "Lake Tahoe, California/Nevada", lat: 39.09, lng: -120.04, region: "USA" },
+  { name: "Crater Lake, Oregon", lat: 42.94, lng: -122.10, region: "USA" },
+  { name: "Lake Michigan", lat: 44.00, lng: -87.00, region: "USA" },
+  { name: "Lake Superior", lat: 47.70, lng: -87.50, region: "USA" },
+  { name: "Lake Huron", lat: 44.80, lng: -82.40, region: "USA" },
+  { name: "Lake Erie", lat: 42.20, lng: -80.80, region: "USA" },
+  { name: "Lake Ontario", lat: 43.70, lng: -77.90, region: "USA" },
+  { name: "Lake Okeechobee, Florida", lat: 26.93, lng: -80.80, region: "USA" },
+  { name: "Lake Mead, Nevada/Arizona", lat: 36.15, lng: -114.40, region: "USA" },
+  { name: "Lake Powell, Utah/Arizona", lat: 37.07, lng: -111.24, region: "USA" },
+  // World
+  { name: "Lake Baikal, Russia", lat: 53.50, lng: 108.00, region: "World" },
+  { name: "Lake Victoria, East Africa", lat: -1.00, lng: 33.00, region: "World" },
+  { name: "Lake Tanganyika, East Africa", lat: -6.20, lng: 29.50, region: "World" },
+  { name: "Lake Geneva, Switzerland/France", lat: 46.43, lng: 6.45, region: "World" },
+  { name: "Loch Ness, Scotland", lat: 57.30, lng: -4.45, region: "World" },
+  { name: "Lake Titicaca, Peru/Bolivia", lat: -15.80, lng: -69.40, region: "World" },
+  { name: "Caspian Sea", lat: 42.00, lng: 50.50, region: "World" }
+];
+
+function parseCoordinates(input: string) {
+  const cleaned = input.replace(/[°'"]/g, '');
+  const regex = /(-?\d+(?:\.\d+)?)\s*([NSns])?,?\s*(-?\d+(?:\.\d+)?)\s*([EWew])?/;
+  const match = cleaned.match(regex);
+  if (!match) return null;
+  
+  let lat = parseFloat(match[1]);
+  let lng = parseFloat(match[3]);
+  
+  const latDir = match[2];
+  const lngDir = match[4];
+  
+  if (latDir && latDir.toUpperCase() === 'S') lat = -lat;
+  if (lngDir && lngDir.toUpperCase() === 'W') lng = -lng;
+  
+  if (isNaN(lat) || isNaN(lng)) return null;
+  return { lat, lng };
+}
+
+function findMatchedLake(input: string) {
+  if (!input || input.trim().length < 2) return null;
+  
+  const lowerInput = input.toLowerCase().trim();
+  for (const lake of LAKES_DB) {
+    const nameParts = lake.name.toLowerCase().split(',');
+    const simpleName = nameParts[0].trim();
+    if (
+      lowerInput.includes(simpleName) || 
+      simpleName.includes(lowerInput) ||
+      lake.name.toLowerCase().includes(lowerInput)
+    ) {
+      if (lowerInput.length >= 3 || simpleName === lowerInput) {
+        return lake;
+      }
+    }
+  }
+  
+  const coords = parseCoordinates(input);
+  if (coords) {
+    let minDistance = Infinity;
+    let closestLake = null;
+    
+    for (const lake of LAKES_DB) {
+      const dLat = lake.lat - coords.lat;
+      const dLng = lake.lng - coords.lng;
+      const dist = Math.sqrt(dLat * dLat + dLng * dLng);
+      if (dist < minDistance) {
+        minDistance = dist;
+        closestLake = lake;
+      }
+    }
+    
+    if (closestLake && minDistance < 12) {
+      return closestLake;
+    }
+  }
+  
+  return null;
+}
+
 export default function PreventionPage() {
   const [data, setData] = useState<any>(null);
   const [logs, setLogs] = useState<any[]>([]);
@@ -14,6 +106,8 @@ export default function PreventionPage() {
   const [severity, setSeverity] = useState('ELEVATED');
   const [notes, setNotes] = useState('');
   const [submittingLog, setSubmittingLog] = useState(false);
+
+  const detectedLake = findMatchedLake(coordinates);
 
   // Form states for Add Directive
   const [showAddDirective, setShowAddDirective] = useState(false);
@@ -51,11 +145,16 @@ export default function PreventionPage() {
       return;
     }
     setSubmittingLog(true);
+
+    const finalCoordinates = detectedLake && !coordinates.toLowerCase().includes(detectedLake.name.split(',')[0].toLowerCase())
+      ? `${coordinates} (${detectedLake.name})`
+      : coordinates;
+
     try {
       const res = await fetch('/api/incident-logs', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ vector, coordinates, severity, notes })
+        body: JSON.stringify({ vector, coordinates: finalCoordinates, severity, notes })
       });
       const json = await res.json();
       if (json.success) {
@@ -430,6 +529,16 @@ export default function PreventionPage() {
                     onChange={e => setCoordinates(e.target.value)}
                     required
                   />
+                  {detectedLake && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: -5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-xs text-xs bg-zinc-50 border border-zinc-150 p-sm rounded-lg flex items-center gap-1.5 font-semibold text-zinc-700"
+                    >
+                      <span className="material-symbols-outlined text-[15px] text-teal-600">water</span>
+                      <span>Auto-detected Water Body: <strong className="text-zinc-950 font-bold">{detectedLake.name}</strong></span>
+                    </motion.div>
+                  )}
                 </div>
                 
                 <div>
