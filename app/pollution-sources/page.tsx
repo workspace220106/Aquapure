@@ -401,83 +401,84 @@ export default function PollutionSourcesPage() {
                   </div>
                 </div>
               </div>
-
               {/* High-Fidelity SVG World Map Container */}
-              <div className="relative border border-zinc-800 rounded-xl overflow-hidden bg-black flex items-center justify-center p-3 group/map select-none min-h-[280px]">
-                {/* SVG map */}
-                <svg viewBox="0 0 1000 500" className="w-full h-auto drop-shadow-sm">
-                  {/* Grid Lines */}
-                  <g stroke="#18181b" strokeWidth="0.5" strokeDasharray="3,3">
-                    <line x1="100" y1="0" x2="100" y2="500" />
-                    <line x1="200" y1="0" x2="200" y2="500" />
-                    <line x1="300" y1="0" x2="300" y2="500" />
-                    <line x1="400" y1="0" x2="400" y2="500" />
-                    <line x1="500" y1="0" x2="500" y2="500" />
-                    <line x1="600" y1="0" x2="600" y2="500" />
-                    <line x1="700" y1="0" x2="700" y2="500" />
-                    <line x1="800" y1="0" x2="800" y2="500" />
-                    <line x1="900" y1="0" x2="900" y2="500" />
-                    
-                    <line x1="0" y1="100" x2="1000" y2="100" />
-                    <line x1="0" y1="200" x2="1000" y2="200" />
-                    <line x1="0" y1="300" x2="1000" y2="300" />
-                    <line x1="0" y1="400" x2="1000" y2="400" />
-                  </g>
+              <div className="relative border border-zinc-800 rounded-xl overflow-hidden bg-black flex flex-col justify-between group/map select-none h-fit self-center w-full">
+                {/* SVG map wrapper with auto-scaling layout */}
+                <div className="p-4 flex-1 flex items-center justify-center">
+                  <svg viewBox="0 0 1000 500" className="w-full h-auto drop-shadow-sm">
+                    {/* Grid Lines */}
+                    <g stroke="#18181b" strokeWidth="0.5" strokeDasharray="3,3">
+                      <line x1="100" y1="0" x2="100" y2="500" />
+                      <line x1="200" y1="0" x2="200" y2="500" />
+                      <line x1="300" y1="0" x2="300" y2="500" />
+                      <line x1="400" y1="0" x2="400" y2="500" />
+                      <line x1="500" y1="0" x2="500" y2="500" />
+                      <line x1="600" y1="0" x2="600" y2="500" />
+                      <line x1="700" y1="0" x2="700" y2="500" />
+                      <line x1="800" y1="0" x2="800" y2="500" />
+                      <line x1="900" y1="0" x2="900" y2="500" />
+                      
+                      <line x1="0" y1="100" x2="1000" y2="100" />
+                      <line x1="0" y1="200" x2="1000" y2="200" />
+                      <line x1="0" y1="300" x2="1000" y2="300" />
+                      <line x1="0" y1="400" x2="1000" y2="400" />
+                    </g>
 
-                  {/* Continent Shapes */}
-                  <g fill="#18181b" stroke="#27272a" strokeWidth="1" strokeLinejoin="round">
-                    {/* North America */}
-                    <path d="M 80,100 L 120,80 L 160,50 L 220,40 L 300,40 L 320,60 L 300,100 L 280,120 L 290,140 L 280,165 L 300,175 L 310,160 L 325,185 L 290,200 L 260,185 L 255,210 L 260,250 L 250,280 L 240,285 L 225,270 L 235,240 L 205,225 L 210,180 L 195,170 L 180,175 L 185,150 L 165,155 L 155,175 L 140,175 L 145,150 L 120,160 L 100,150 L 95,125 Z" />
-                    {/* South America */}
-                    <path d="M 250,280 L 260,285 L 270,300 L 290,310 L 305,320 L 320,335 L 305,365 L 290,390 L 285,415 L 280,445 L 265,475 L 255,480 L 255,470 L 260,440 L 250,420 L 245,395 L 235,360 L 230,330 L 232,310 L 242,295 Z" />
-                    {/* Eurasia */}
-                    <path d="M 450,80 L 470,75 L 490,60 L 520,55 L 560,50 L 600,45 L 650,40 L 720,45 L 800,50 L 850,55 L 900,60 L 920,80 L 900,120 L 880,135 L 885,155 L 855,185 L 820,195 L 800,210 L 785,250 L 775,275 L 755,275 L 760,250 L 740,245 L 725,260 L 710,245 L 690,255 L 670,225 L 635,220 L 630,240 L 610,230 L 600,250 L 590,240 L 565,245 L 575,225 L 550,220 L 530,225 L 515,245 L 505,245 L 490,220 L 465,220 L 460,205 L 475,190 L 445,185 L 440,165 L 450,150 L 440,140 L 450,125 L 435,115 L 435,95 Z" />
-                    {/* Africa */}
-                    <path d="M 450,220 L 470,220 L 490,220 L 505,245 L 515,245 L 530,225 L 550,220 L 575,225 L 595,255 L 605,275 L 605,305 L 585,340 L 570,365 L 555,395 L 545,410 L 540,410 L 545,390 L 535,370 L 525,355 L 525,320 L 515,310 L 505,300 L 485,300 L 475,295 L 450,280 L 435,265 L 435,235 Z" />
-                    {/* Australia */}
-                    <path d="M 770,330 L 800,320 L 825,325 L 840,335 L 850,355 L 845,380 L 830,390 L 810,395 L 785,390 L 765,370 L 760,350 Z" />
-                    {/* Greenland */}
-                    <path d="M 340,35 L 380,35 L 395,50 L 375,75 L 345,70 L 335,55 Z" />
-                    {/* Madagascar */}
-                    <path d="M 605,355 L 615,350 L 610,380 L 595,385 L 595,365 Z" />
-                  </g>
+                    {/* Continent Shapes */}
+                    <g fill="#18181b" stroke="#27272a" strokeWidth="1" strokeLinejoin="round">
+                      {/* North America */}
+                      <path d="M 80,100 L 120,80 L 160,50 L 220,40 L 300,40 L 320,60 L 300,100 L 280,120 L 290,140 L 280,165 L 300,175 L 310,160 L 325,185 L 290,200 L 260,185 L 255,210 L 260,250 L 250,280 L 240,285 L 225,270 L 235,240 L 205,225 L 210,180 L 195,170 L 180,175 L 185,150 L 165,155 L 155,175 L 140,175 L 145,150 L 120,160 L 100,150 L 95,125 Z" />
+                      {/* South America */}
+                      <path d="M 250,280 L 260,285 L 270,300 L 290,310 L 305,320 L 320,335 L 305,365 L 290,390 L 285,415 L 280,445 L 265,475 L 255,480 L 255,470 L 260,440 L 250,420 L 245,395 L 235,360 L 230,330 L 232,310 L 242,295 Z" />
+                      {/* Eurasia */}
+                      <path d="M 450,80 L 470,75 L 490,60 L 520,55 L 560,50 L 600,45 L 650,40 L 720,45 L 800,50 L 850,55 L 900,60 L 920,80 L 900,120 L 880,135 L 885,155 L 855,185 L 820,195 L 800,210 L 785,250 L 775,275 L 755,275 L 760,250 L 740,245 L 725,260 L 710,245 L 690,255 L 670,225 L 635,220 L 630,240 L 610,230 L 600,250 L 590,240 L 565,245 L 575,225 L 550,220 L 530,225 L 515,245 L 505,245 L 490,220 L 465,220 L 460,205 L 475,190 L 445,185 L 440,165 L 450,150 L 440,140 L 450,125 L 435,115 L 435,95 Z" />
+                      {/* Africa */}
+                      <path d="M 450,220 L 470,220 L 490,220 L 505,245 L 515,245 L 530,225 L 550,220 L 575,225 L 595,255 L 605,275 L 605,305 L 585,340 L 570,365 L 555,395 L 545,410 L 540,410 L 545,390 L 535,370 L 525,355 L 525,320 L 515,310 L 505,300 L 485,300 L 475,295 L 450,280 L 435,265 L 435,235 Z" />
+                      {/* Australia */}
+                      <path d="M 770,330 L 800,320 L 825,325 L 840,335 L 850,355 L 845,380 L 830,390 L 810,395 L 785,390 L 765,370 L 760,350 Z" />
+                      {/* Greenland */}
+                      <path d="M 340,35 L 380,35 L 395,50 L 375,75 L 345,70 L 335,55 Z" />
+                      {/* Madagascar */}
+                      <path d="M 605,355 L 615,350 L 610,380 L 595,385 L 595,365 Z" />
+                    </g>
 
-                  {/* World Map Interactive Node Overlays */}
-                  {INDUSTRIAL_SITES.map((site) => {
-                    const isActive = activeSite.name === site.name;
-                    return (
-                      <g 
-                        key={site.name}
-                        className="cursor-pointer"
-                        onClick={() => setActiveSite(site)}
-                        onMouseEnter={() => setHoveredSiteNode(site)}
-                        onMouseLeave={() => setHoveredSiteNode(null)}
-                      >
-                        {/* Pulse Ring */}
-                        <circle 
-                          cx={site.mapX} 
-                          cy={site.mapY} 
-                          r={isActive ? "20" : "10"}
-                          fill="transparent"
-                          stroke={isActive ? "#ef4444" : "#3b82f6"}
-                          strokeWidth="1.5"
-                          className={isActive ? "animate-pulse" : "hover:animate-ping"}
-                          opacity={isActive ? "0.6" : "0.4"}
-                        />
-                        {/* Node Core */}
-                        <circle 
-                          cx={site.mapX} 
-                          cy={site.mapY} 
-                          r={isActive ? "7" : "5"}
-                          fill={isActive ? "#dc2626" : "#2563eb"}
-                          stroke="#ffffff"
-                          strokeWidth="1.5"
-                          className="transition-all duration-300"
-                        />
-                      </g>
-                    );
-                  })}
-                </svg>
+                    {/* World Map Interactive Node Overlays */}
+                    {INDUSTRIAL_SITES.map((site) => {
+                      const isActive = activeSite.name === site.name;
+                      return (
+                        <g 
+                          key={site.name}
+                          className="cursor-pointer"
+                          onClick={() => setActiveSite(site)}
+                          onMouseEnter={() => setHoveredSiteNode(site)}
+                          onMouseLeave={() => setHoveredSiteNode(null)}
+                        >
+                          {/* Pulse Ring */}
+                          <circle 
+                            cx={site.mapX} 
+                            cy={site.mapY} 
+                            r={isActive ? "20" : "10"}
+                            fill="transparent"
+                            stroke={isActive ? "#ef4444" : "#3b82f6"}
+                            strokeWidth="1.5"
+                            className={isActive ? "animate-pulse" : "hover:animate-ping"}
+                            opacity={isActive ? "0.6" : "0.4"}
+                          />
+                          {/* Node Core */}
+                          <circle 
+                            cx={site.mapX} 
+                            cy={site.mapY} 
+                            r={isActive ? "7" : "5"}
+                            fill={isActive ? "#dc2626" : "#2563eb"}
+                            stroke="#ffffff"
+                            strokeWidth="1.5"
+                            className="transition-all duration-300"
+                          />
+                        </g>
+                      );
+                    })}
+                  </svg>
+                </div>
 
                 {/* Map Hover Tooltip Overlay */}
                 <AnimatePresence>
@@ -512,7 +513,7 @@ export default function PollutionSourcesPage() {
                 </AnimatePresence>
 
                 {/* Bottom Bar Info */}
-                <div className="absolute bottom-0 left-0 right-0 p-3.5 backdrop-blur-sm bg-zinc-950/90 border-t border-zinc-800 z-10 flex justify-between items-center text-white">
+                <div className="p-3.5 bg-zinc-950/90 border-t border-zinc-800 flex justify-between items-center text-white">
                   <span className="font-label-md text-xs uppercase tracking-widest font-bold flex items-center gap-2">
                     <span className="relative flex h-3.5 w-3.5">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
