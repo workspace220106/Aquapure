@@ -304,9 +304,9 @@ export default function PollutionSourcesPage() {
           {/* Overview Card (Col 1-4) */}
           <motion.div 
             variants={itemVariants}
-            className="lg:col-span-4 bg-white border border-zinc-200 rounded-2xl p-6 flex flex-col justify-between h-full group hover:border-zinc-300 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-red-500/5"
+            className="lg:col-span-4 bg-white border border-zinc-200 rounded-2xl p-6 flex flex-col h-full group hover:border-zinc-300 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-red-500/5"
           >
-            <div className="flex justify-between items-start mb-lg">
+            <div className="flex justify-between items-start mb-6">
               <div className="flex items-center gap-2 text-zinc-900">
                 <div className="p-2 bg-zinc-100 rounded-lg group-hover:bg-zinc-200 transition-colors">
                   <span className="material-symbols-outlined text-zinc-900" style={{ fontVariationSettings: "'FILL' 1" }}>radar</span>
@@ -315,29 +315,32 @@ export default function PollutionSourcesPage() {
               </div>
               <span className="px-3 py-1 bg-red-50 text-red-700 font-label-md text-xs font-bold rounded-full border border-red-200 shadow-sm animate-pulse">ELEVATED</span>
             </div>
-            <div>
-              <div className="font-headline-lg text-[80px] font-black leading-none tracking-tighter text-zinc-900 mb-2 group-hover:scale-105 transition-transform origin-left duration-500">
+            
+            <div className="flex flex-col flex-1">
+              <div className="font-headline-lg text-[56px] font-black leading-none tracking-tighter text-zinc-900 mb-2 group-hover:scale-105 transition-transform origin-left duration-500">
                 {activeSite.globalToxicityIndex.toFixed(1)}
                 <span className="text-headline-md text-zinc-400">%</span>
               </div>
-              <div className="h-[1px] w-full bg-gradient-to-r from-zinc-200 via-zinc-200 to-transparent my-6"></div>
-              <p className="font-body-md text-sm text-zinc-600 mb-6 leading-relaxed">
+              <div className="h-[1px] w-full bg-gradient-to-r from-zinc-200 via-zinc-200 to-transparent my-4"></div>
+              <p className="font-body-md text-sm text-zinc-650 mb-6 leading-relaxed">
                 Overall concentration of verified pollutants across monitored watersheds. Active site tracked: <strong className="text-zinc-950 font-bold">{activeSite.name}</strong>.
               </p>
-              <button 
-                onClick={() => {
-                  const currentIndex = INDUSTRIAL_SITES.findIndex(s => s.name === activeSite.name);
-                  const nextIndex = (currentIndex + 1) % INDUSTRIAL_SITES.length;
-                  setActiveSite(INDUSTRIAL_SITES[nextIndex]);
-                }}
-                className="relative overflow-hidden bg-zinc-900 text-white font-label-md text-sm font-bold px-4 py-3.5 rounded-xl uppercase tracking-widest hover:bg-zinc-800 transition-all w-full shadow-md hover:shadow-lg group/btn cursor-pointer"
-              >
-                <span className="relative z-10 flex items-center justify-center gap-2">
-                  <span className="material-symbols-outlined text-[18px]">public</span>
-                  Cycle active sites
-                </span>
-                <div className="absolute inset-0 bg-white/10 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-in-out"></div>
-              </button>
+              <div className="mt-auto">
+                <button 
+                  onClick={() => {
+                    const currentIndex = INDUSTRIAL_SITES.findIndex(s => s.name === activeSite.name);
+                    const nextIndex = (currentIndex + 1) % INDUSTRIAL_SITES.length;
+                    setActiveSite(INDUSTRIAL_SITES[nextIndex]);
+                  }}
+                  className="relative overflow-hidden bg-zinc-900 text-white font-label-md text-sm font-bold px-4 py-3.5 rounded-xl uppercase tracking-widest hover:bg-zinc-800 transition-all w-full shadow-md hover:shadow-lg group/btn cursor-pointer"
+                >
+                  <span className="relative z-10 flex items-center justify-center gap-2">
+                    <span className="material-symbols-outlined text-[18px]">public</span>
+                    Cycle active sites
+                  </span>
+                  <div className="absolute inset-0 bg-white/10 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-in-out"></div>
+                </button>
+              </div>
             </div>
           </motion.div>
 
@@ -400,11 +403,11 @@ export default function PollutionSourcesPage() {
               </div>
 
               {/* High-Fidelity SVG World Map Container */}
-              <div className="relative border border-zinc-200 rounded-xl overflow-hidden bg-zinc-50 flex items-center justify-center p-3 group/map select-none min-h-[280px]">
+              <div className="relative border border-zinc-800 rounded-xl overflow-hidden bg-black flex items-center justify-center p-3 group/map select-none min-h-[280px]">
                 {/* SVG map */}
                 <svg viewBox="0 0 1000 500" className="w-full h-auto drop-shadow-sm">
                   {/* Grid Lines */}
-                  <g stroke="#e5e7eb" strokeWidth="0.5" strokeDasharray="3,3">
+                  <g stroke="#18181b" strokeWidth="0.5" strokeDasharray="3,3">
                     <line x1="100" y1="0" x2="100" y2="500" />
                     <line x1="200" y1="0" x2="200" y2="500" />
                     <line x1="300" y1="0" x2="300" y2="500" />
@@ -422,7 +425,7 @@ export default function PollutionSourcesPage() {
                   </g>
 
                   {/* Continent Shapes */}
-                  <g fill="#e4e4e7" stroke="#d4d4d8" strokeWidth="1" strokeLinejoin="round">
+                  <g fill="#18181b" stroke="#27272a" strokeWidth="1" strokeLinejoin="round">
                     {/* North America */}
                     <path d="M 80,100 L 120,80 L 160,50 L 220,40 L 300,40 L 320,60 L 300,100 L 280,120 L 290,140 L 280,165 L 300,175 L 310,160 L 325,185 L 290,200 L 260,185 L 255,210 L 260,250 L 250,280 L 240,285 L 225,270 L 235,240 L 205,225 L 210,180 L 195,170 L 180,175 L 185,150 L 165,155 L 155,175 L 140,175 L 145,150 L 120,160 L 100,150 L 95,125 Z" />
                     {/* South America */}
@@ -509,7 +512,7 @@ export default function PollutionSourcesPage() {
                 </AnimatePresence>
 
                 {/* Bottom Bar Info */}
-                <div className="absolute bottom-0 left-0 right-0 p-3.5 backdrop-blur-sm bg-zinc-950/90 border-t border-zinc-850 z-10 flex justify-between items-center text-white">
+                <div className="absolute bottom-0 left-0 right-0 p-3.5 backdrop-blur-sm bg-zinc-950/90 border-t border-zinc-800 z-10 flex justify-between items-center text-white">
                   <span className="font-label-md text-xs uppercase tracking-widest font-bold flex items-center gap-2">
                     <span className="relative flex h-3.5 w-3.5">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
