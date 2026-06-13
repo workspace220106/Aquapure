@@ -304,7 +304,7 @@ export default function PollutionSourcesPage() {
           {/* Overview Card (Col 1-4) */}
           <motion.div 
             variants={itemVariants}
-            className="lg:col-span-4 bg-white border border-zinc-200 rounded-2xl p-6 flex flex-col h-full group hover:border-zinc-300 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-red-500/5"
+            className="lg:col-span-4 bg-white border border-zinc-200 rounded-2xl p-6 flex flex-col h-fit group hover:border-zinc-300 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-red-500/5"
           >
             <div className="flex justify-between items-start mb-6">
               <div className="flex items-center gap-2 text-zinc-900">
@@ -325,7 +325,7 @@ export default function PollutionSourcesPage() {
               <p className="font-body-md text-sm text-zinc-650 mb-6 leading-relaxed">
                 Overall concentration of verified pollutants across monitored watersheds. Active site tracked: <strong className="text-zinc-950 font-bold">{activeSite.name}</strong>.
               </p>
-              <div className="mt-auto">
+              <div className="mt-6">
                 <button 
                   onClick={() => {
                     const currentIndex = INDUSTRIAL_SITES.findIndex(s => s.name === activeSite.name);
